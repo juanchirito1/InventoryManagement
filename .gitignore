@@ -1,0 +1,20 @@
+## .NET Core / Visual Studio
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Database files
+*.db
+*.sqlite
+*.mdf
+*.ldf
+
+# OS generated
+.DS_Store
+Thumbs.db
