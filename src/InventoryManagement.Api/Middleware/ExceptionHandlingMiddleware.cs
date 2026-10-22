@@ -29,7 +29,10 @@ public class ExceptionHandlingMiddleware
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocurrió un error inesperado en el servidor");
-            await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, "Ocurrió un error interno en el servidor.");
+            var message = ex.InnerException != null 
+                ? $"{ex.Message} -> {ex.InnerException.Message}" 
+                : ex.Message;
+            await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, message);
         }
     }
 
