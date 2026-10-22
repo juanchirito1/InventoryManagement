@@ -5,4 +5,7 @@
     <Project Path="src/InventoryManagement.Domain/InventoryManagement.Domain.csproj" />
     <Project Path="src/InventoryManagement.Infrastructure/InventoryManagement.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/InventoryManagement.UnitTests/InventoryManagement.UnitTests.csproj" />
+  </Folder>
 </Solution>

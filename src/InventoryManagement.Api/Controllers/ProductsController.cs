@@ -1,5 +1,6 @@
 using InventoryManagement.Application.DTOs.Product;
 using InventoryManagement.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagement.Api.Controllers;
@@ -16,6 +17,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll(
         [FromQuery] string? search = null,
         [FromQuery] int? categoryId = null,
@@ -26,6 +28,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<ActionResult<ProductDto>> GetById(int id)
     {
         var product = await _productService.GetByIdAsync(id);
@@ -34,6 +37,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductDto dto)
     {
         var created = await _productService.CreateAsync(dto);
@@ -41,6 +45,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost("{id}/adjust-stock")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProductDto>> AdjustStock(int id, [FromBody] AdjustStockDto dto)
     {
         var updated = await _productService.AdjustStockAsync(id, dto);
@@ -48,6 +53,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("movements")]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<StockMovementDto>>> GetMovements([FromQuery] int? productId = null)
     {
         var movements = await _productService.GetMovementsAsync(productId);

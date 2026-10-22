@@ -1,0 +1,30 @@
+name: Build & Test CI
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build:
+    name: Build & Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore InventoryManagement.slnx
+
+    - name: Build Solution
+      run: dotnet build InventoryManagement.slnx --no-restore --configuration Release
+
+    - name: Run Unit Tests
+      run: dotnet test InventoryManagement.slnx --no-build --configuration Release --verbosity normal

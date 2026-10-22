@@ -1,5 +1,6 @@
 using InventoryManagement.Application.DTOs.Category;
 using InventoryManagement.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagement.Api.Controllers;
@@ -16,6 +17,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAll()
     {
         var result = await _categoryService.GetAllAsync();
@@ -23,6 +25,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<ActionResult<CategoryDto>> GetById(int id)
     {
         var category = await _categoryService.GetByIdAsync(id);
@@ -31,6 +34,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<CategoryDto>> Create([FromBody] CreateCategoryDto dto)
     {
         var created = await _categoryService.CreateAsync(dto);
@@ -38,6 +42,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var deleted = await _categoryService.DeleteAsync(id);

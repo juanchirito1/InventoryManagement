@@ -1,5 +1,6 @@
 using InventoryManagement.Domain.Entities;
 using InventoryManagement.Domain.Enums;
+using InventoryManagement.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagement.Infrastructure.Data;
@@ -70,6 +71,33 @@ public static class DbInitializer
         };
 
         context.Customers.AddRange(customers);
+        await context.SaveChangesAsync();
+
+        // Seed de usuarios del sistema
+        AuthService.CreatePasswordHash("Admin123!", out byte[] adminHash, out byte[] adminSalt);
+        AuthService.CreatePasswordHash("Vendedor123!", out byte[] sellerHash, out byte[] sellerSalt);
+
+        var users = new List<User>
+        {
+            new User
+            {
+                Username = "admin",
+                FullName = "Administrador del Sistema",
+                Role = "Admin",
+                PasswordHash = adminHash,
+                PasswordSalt = adminSalt
+            },
+            new User
+            {
+                Username = "vendedor",
+                FullName = "Asesor de Ventas",
+                Role = "Seller",
+                PasswordHash = sellerHash,
+                PasswordSalt = sellerSalt
+            }
+        };
+
+        context.Users.AddRange(users);
         await context.SaveChangesAsync();
     }
 }

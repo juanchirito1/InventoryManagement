@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -83,6 +84,15 @@ public class ApplicationDbContext : DbContext
             entity.Property(c => c.FullName).IsRequired().HasMaxLength(150);
             entity.Property(c => c.DocumentNumber).IsRequired().HasMaxLength(20);
             entity.HasIndex(c => c.DocumentNumber).IsUnique();
+        });
+
+        // User configuration
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasIndex(u => u.Username).IsUnique();
+            entity.Property(u => u.Username).IsRequired().HasMaxLength(50);
+            entity.Property(u => u.FullName).IsRequired().HasMaxLength(150);
+            entity.Property(u => u.Role).IsRequired().HasMaxLength(20);
         });
     }
 }
